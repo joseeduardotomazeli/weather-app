@@ -1,5 +1,7 @@
+import Routes from './pages/routes';
+
 function App() {
-  return <h1>Builders | Weather App</h1>;
+  return <Routes />;
 }
 
 export default App;
