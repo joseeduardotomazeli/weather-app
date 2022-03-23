@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import geoapifyApi from '../../services/geoapify';
 import openWeatherApi from '../../services/open-weather';
 
 const options = {
@@ -9,17 +10,30 @@ const options = {
 };
 
 function Home() {
+  const [address, setAddress] = useState(null);
   const [weather, setWeather] = useState(null);
 
-  const getWeather = useCallback(() => {
+  const getAddressAndWeather = useCallback(() => {
     async function onSuccess(position: GeolocationPosition) {
       const { latitude: lat, longitude: lon } = position.coords;
 
-      const response = await openWeatherApi.get('/data/2.5/weather', {
-        params: { lat, lon },
-      });
+      const [responseAddress, responseWeather] = await Promise.allSettled([
+        geoapifyApi.get('/geocode/reverse', {
+          params: { lat, lon },
+        }),
 
-      setWeather(response.data);
+        openWeatherApi.get('/data/2.5/weather', {
+          params: { lat, lon },
+        }),
+      ]);
+
+      setAddress(
+        responseAddress.status === 'fulfilled' && responseAddress.value.data
+      );
+
+      setWeather(
+        responseWeather.status === 'fulfilled' && responseWeather.value.data
+      );
     }
 
     function onError() {
@@ -30,8 +44,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    getWeather();
-  }, [getWeather]);
+    getAddressAndWeather();
+  }, [getAddressAndWeather]);
 
   return <h1>Builders | Weather App</h1>;
 }
