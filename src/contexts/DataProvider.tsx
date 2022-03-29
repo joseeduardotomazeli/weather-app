@@ -9,14 +9,14 @@ import {
 import { AddressType } from '../types/Address';
 import { WeatherType } from '../types/Weather';
 
-import geoapifyApi from '../services/geoapify';
 import openWeatherApi from '../services/open-weather';
+import geoapifyApi from '../services/geoapify';
 
 interface DataContextData {
   isLoading: boolean;
   hasError: boolean;
-  address: AddressType | undefined;
   weather: WeatherType | undefined;
+  address: AddressType | undefined;
   getAddressWeatherByUserPosition: () => void;
 }
 
@@ -38,8 +38,8 @@ function DataProvider(props: DataProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const [address, setAddress] = useState<AddressType>();
   const [weather, setWeather] = useState<WeatherType>();
+  const [address, setAddress] = useState<AddressType>();
 
   const { children } = props;
 
@@ -47,32 +47,24 @@ function DataProvider(props: DataProviderProps) {
     async function onSuccess(position: GeolocationPosition) {
       const { latitude: lat, longitude: lon } = position.coords;
 
-      const [responseAddress, responseWeather] = await Promise.allSettled([
-        geoapifyApi.get('/geocode/reverse', {
+      const [responseWeather, responseAddress] = await Promise.allSettled([
+        openWeatherApi.get('/data/2.5/weather', {
           params: { lat, lon },
         }),
 
-        openWeatherApi.get('/data/2.5/weather', {
+        geoapifyApi.get('/geocode/reverse', {
           params: { lat, lon },
         }),
       ]);
 
       setIsLoading(false);
-      setHasError(false);
-
-      const address =
-        responseAddress.status === 'fulfilled' &&
-        responseAddress.value.data['features'][0]['properties'];
 
       const weather =
         responseWeather.status === 'fulfilled' && responseWeather.value.data;
 
-      if (address)
-        setAddress({
-          street: address.street,
-          housenumber: address.housenumber,
-          city: address.city,
-        });
+      const address =
+        responseAddress.status === 'fulfilled' &&
+        responseAddress.value.data['features'][0]['properties'];
 
       if (weather)
         setWeather({
@@ -81,6 +73,13 @@ function DataProvider(props: DataProviderProps) {
           description: weather.weather[0].description,
           humidity: weather.main.humidity,
           windSpeed: weather.wind.speed,
+        });
+
+      if (address)
+        setAddress({
+          street: address.street,
+          housenumber: address.housenumber,
+          city: address.city,
         });
     }
 
@@ -92,6 +91,8 @@ function DataProvider(props: DataProviderProps) {
     }
 
     setIsLoading(true);
+    setHasError(false);
+
     navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
   }, []);
 
@@ -104,8 +105,8 @@ function DataProvider(props: DataProviderProps) {
       value={{
         isLoading,
         hasError,
-        address,
         weather,
+        address,
         getAddressWeatherByUserPosition,
       }}
     >
