@@ -6,14 +6,27 @@ import {
   ReactNode,
 } from 'react';
 
+import { AddressType } from '../types/Address';
+import { WeatherType } from '../types/Weather';
+
 import geoapifyApi from '../services/geoapify';
 import openWeatherApi from '../services/open-weather';
+
+interface DataContextData {
+  isLoading: boolean;
+  hasError: boolean;
+  address: AddressType | undefined;
+  weather: WeatherType | undefined;
+  getAddressWeatherByUserPosition: () => void;
+}
 
 interface DataProviderProps {
   children: ReactNode;
 }
 
-export const DataContext = createContext({});
+export const DataContext = createContext<DataContextData>(
+  {} as DataContextData
+);
 
 const options = {
   enableHighAccuracy: true,
@@ -22,8 +35,11 @@ const options = {
 };
 
 function DataProvider(props: DataProviderProps) {
-  const [address, setAddress] = useState(null);
-  const [weather, setWeather] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const [address, setAddress] = useState<AddressType>();
+  const [weather, setWeather] = useState<WeatherType>();
 
   const { children } = props;
 
@@ -41,19 +57,41 @@ function DataProvider(props: DataProviderProps) {
         }),
       ]);
 
-      setAddress(
-        responseAddress.status === 'fulfilled' && responseAddress.value.data
-      );
+      setIsLoading(false);
+      setHasError(false);
 
-      setWeather(
-        responseWeather.status === 'fulfilled' && responseWeather.value.data
-      );
+      const address =
+        responseAddress.status === 'fulfilled' &&
+        responseAddress.value.data['features'][0]['properties'];
+
+      const weather =
+        responseWeather.status === 'fulfilled' && responseWeather.value.data;
+
+      if (address)
+        setAddress({
+          street: address.street,
+          housenumber: address.housenumber,
+          city: address.city,
+        });
+
+      if (weather)
+        setWeather({
+          temperature: weather.main.temp,
+          icon: weather.weather[0].icon,
+          description: weather.weather[0].description,
+          humidity: weather.main.humidity,
+          windSpeed: weather.wind.speed,
+        });
     }
 
     function onError() {
+      setIsLoading(false);
+      setHasError(true);
+
       console.log('Error on get navigator current position.');
     }
 
+    setIsLoading(true);
     navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
   }, []);
 
@@ -63,7 +101,13 @@ function DataProvider(props: DataProviderProps) {
 
   return (
     <DataContext.Provider
-      value={{ address, weather, getAddressWeatherByUserPosition }}
+      value={{
+        isLoading,
+        hasError,
+        address,
+        weather,
+        getAddressWeatherByUserPosition,
+      }}
     >
       {children}
     </DataContext.Provider>
