@@ -13,7 +13,7 @@ function Wrapper(props: WrapperProps) {
       flexDirection="column"
       padding={4}
       minHeight="100vh"
-      bgGradient="linear(to-r, blue.600, blue.900)"
+      bgGradient="linear(to-r, purple.600, purple.900)"
     >
       {children}
     </Flex>

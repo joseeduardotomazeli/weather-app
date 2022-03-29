@@ -34,17 +34,17 @@ function Header() {
       height="fit-content"
     >
       <Flex>
-        <Box marginRight={2}>
+        <Flex align="center" marginRight={2}>
           <Heading as="h1" color="gray.200" fontSize="medium">
             Builders | Weather app
           </Heading>
-        </Box>
+        </Flex>
 
         <Tooltip label="Recarregar">
           <IconButton
             aria-label="Recarregar"
             size="xs"
-            colorScheme="blue"
+            colorScheme="purple"
             icon={<RepeatIcon />}
             disabled={isLoading}
             onClick={getAddressWeatherByUserPosition}
