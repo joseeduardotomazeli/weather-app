@@ -9,7 +9,7 @@ interface WeatherProps {
 function Weather(props: WeatherProps) {
   const { weather } = props;
 
-  const imageSource = `http://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+  const imageSource = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
 
   return (
     <Flex flexDirection="column" align="center">
