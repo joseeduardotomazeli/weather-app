@@ -18,7 +18,8 @@ function Address(props: AddressProps) {
         fontWeight="bold"
         textAlign="center"
       >
-        📍 {address.street} - {address.houseNumber},
+        📍 {address.street}
+        {address.houseNumber && ` - ${address.houseNumber},`}
       </Text>
 
       <Text
