@@ -1,6 +1,5 @@
 import {
   Flex,
-  Box,
   Heading,
   Text,
   IconButton,
@@ -42,6 +41,7 @@ function Header() {
 
         <Tooltip label="Recarregar">
           <IconButton
+            data-testid="refresh-button"
             aria-label="Recarregar"
             size="xs"
             colorScheme="purple"

@@ -1,5 +1,5 @@
 export type AddressType = {
   street: string;
-  housenumber: string;
+  houseNumber: string;
   city: string;
 };

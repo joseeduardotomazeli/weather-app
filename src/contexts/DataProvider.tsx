@@ -78,7 +78,7 @@ function DataProvider(props: DataProviderProps) {
       if (address)
         setAddress({
           street: address.street,
-          housenumber: address.housenumber,
+          houseNumber: address.housenumber,
           city: address.city,
         });
     }
