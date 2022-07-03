@@ -15,7 +15,7 @@ describe('App', () => {
       month: 'numeric',
     });
 
-    expect(screen.getByText('Builders | Weather app')).toBeInTheDocument();
+    expect(screen.getByText('Weather app')).toBeInTheDocument();
     expect(screen.getByTestId('refresh-button')).toBeInTheDocument();
     expect(screen.getByText(dateFormatted)).toBeInTheDocument();
   });

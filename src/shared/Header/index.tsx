@@ -35,7 +35,7 @@ function Header() {
       <Flex>
         <Flex align="center" marginRight={2}>
           <Heading as="h1" color="gray.200" fontSize="medium">
-            Builders | Weather app
+            Weather app
           </Heading>
         </Flex>
 

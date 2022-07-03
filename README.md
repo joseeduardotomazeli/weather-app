@@ -1,10 +1,10 @@
-# Builders | Weather app
+# Weather app
 
 ## 📷 Screenshot
 ![Screenshot](https://i.imgur.com/FyDZsBg.png)
 
 ## 👁 Preview
-https://builders-weather-app.vercel.app
+https://weather-app-joseeduardotomazeli.vercel.app
 
 ## 💙 Motivation
 The project aims to get the user's current geolocation position and show an approximate location and weather condition.
@@ -12,8 +12,8 @@ The project aims to get the user's current geolocation position and show an appr
 ## 🚀 Getting Started
 
 ```bash
-$ git clone https://github.com/joseeduardotomazeli/builders-weather-app
-$ cd builders-weather-app
+$ git clone https://github.com/joseeduardotomazeli/weather-app
+$ cd weather-app
 
 $ yarn
 $ yarn start

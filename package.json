@@ -1,5 +1,5 @@
 {
-  "name": "builders-weather-app",
+  "name": "weather-app",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
