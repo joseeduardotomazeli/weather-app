@@ -1,8 +1,5 @@
 # Weather app
 
-## 📷 Screenshot
-![Screenshot](https://i.imgur.com/FyDZsBg.png)
-
 ## 👁 Preview
 https://weather-app-joseeduardotomazeli.vercel.app
 
